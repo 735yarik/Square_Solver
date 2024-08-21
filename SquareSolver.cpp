@@ -81,7 +81,7 @@ int solver(double a, double b, double c, double *x1, double *x2)
     else
     {
         double discriminant = b*b - 4*a*c;
-        if (discriminant > 0)   // zero?
+        if (discriminant > EPSILON)   // zero?
         {
 
             *x1 = (- b + sqrt(discriminant)) / (2*a);
