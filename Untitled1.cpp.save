@@ -46,7 +46,7 @@ int input(double *a, double *b, double *c)
 
     int nRoots = 0;//
 
-    scanf("%lg %lg %lg", a, b, c);
+    scanf("%lg %lg %lg", &a, &b, &c);
 
     return 0; // void
 }
@@ -77,8 +77,6 @@ int solver(double a, double b, double c, double *x1, double *x2)
         }
     }
     else
-    {
-        double discriminant = b*b-4*a*c;
         if (discriminant > 0)   // zero?
         {
             nRoots = 2;
@@ -95,7 +93,6 @@ int solver(double a, double b, double c, double *x1, double *x2)
             }
             else
                 nRoots = 0;
-    }
 
     return nRoots;
 }
