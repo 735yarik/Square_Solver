@@ -5,14 +5,10 @@
 #include <assert.h>
 
 // TODO codestyle, assert
-
-// TODO check input(buffer input, while, getc, getchar)
 // TODO doxygen
+// TODO enum
 
-const int  INF_ROOTS  = -1;
-const int ZERO_ROOTS  = 0;
-const int ONE_ROOT    = 1;
-const int TWO_ROOTS   = 2;
+enum roots_values {INF_ROOTS = -1, ZERO_ROOTS = 0, ONE_ROOT = 1, TWO_ROOTS = 2};
 const float EPSILON   = 1e-10;
 
 void input(double *a, double *b, double *c);
@@ -55,6 +51,7 @@ void input(double *a, double *b, double *c)
 
         while (getchar() != '\n')                             // ' or  " ?
         {}
+
     }
 
     assert(isfinite(*a));
