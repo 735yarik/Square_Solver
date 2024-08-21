@@ -2,3 +2,5 @@
 *.exe
 *.exe.log
 *.exe.log.dmp
+*.gitignore
+*.gitattributes
