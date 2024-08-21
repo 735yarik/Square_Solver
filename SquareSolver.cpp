@@ -8,7 +8,13 @@
 // TODO doxygen
 // TODO enum
 
-enum roots_values {INF_ROOTS = -1, ZERO_ROOTS = 0, ONE_ROOT = 1, TWO_ROOTS = 2};
+enum roots_values
+{
+INF_ROOTS  = -1,
+ZERO_ROOTS = 0,
+ONE_ROOT   = 1,
+TWO_ROOTS  = 2
+};
 
 const float EPSILON   = 1e-10;
 
@@ -17,6 +23,7 @@ int solver(double a, double b, double c, double *x1, double *x2);
 int linear_solver(double b, double c, double *x1, double *x2);
 int square_solver(double a, double b, double c, double *x1, double *x2);
 void output(int nRoots, double x1, double x2);
+void buffer_clean();
 bool is_zero(double num);
 
 int main()
@@ -51,8 +58,7 @@ void input(double *a, double *b, double *c)
 
         printf("введите корректные числа\n");
 
-        while (getchar() != '\n')                             // ' or  " ?
-        {}
+        buffer_clean();
 
     }
 
@@ -192,4 +198,12 @@ bool is_zero(double num)
     return false;
 
 }
+
+void buffer_clean()
+{
+    while (getchar() != '\n')                             // ' or  " ?
+    {}
+}
+
+
 
