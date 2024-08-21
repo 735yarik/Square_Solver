@@ -73,9 +73,11 @@ int solver(double a, double b, double c, double *x1, double *x2)
         }
         else
         {
+        
             *x1 = (-c) / b;
-
+            
             return ONE_ROOT;
+            
         }
     }
     else
@@ -86,15 +88,15 @@ int solver(double a, double b, double c, double *x1, double *x2)
 
             *x1 = (- b + sqrt(discriminant)) / (2*a);
             *x2 = (- b - sqrt(discriminant)) / (2*a);
-
+            
             return TWO_ROOTS;
             }
         else
             if (comparator(discriminant))
             {
-
+                
                 *x1=(-b) / (2*a);
-
+                
                 return ONE_ROOT;
             }
             else
