@@ -10,10 +10,10 @@
 
 enum roots_values
 {
-INF_ROOTS  = -1,
-ZERO_ROOTS = 0,
-ONE_ROOT   = 1,
-TWO_ROOTS  = 2
+    INF_ROOTS  = -1,
+    ZERO_ROOTS = 0,
+    ONE_ROOT   = 1,
+    TWO_ROOTS  = 2
 };
 
 const float EPSILON   = 1e-10;
