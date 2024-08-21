@@ -20,7 +20,7 @@ const int ONE_ROOT = 1;
 const int TWO_ROOTS = 2;
 const float EPSILON = 1e-10;
 
-int input(double *a, double *b, double *c);
+void input(double *a, double *b, double *c);
 int solver(double a, double b, double c, double *x1, double *x2);
 int output(int nRoots, double x1, double x2);
 bool comparator(double num);
@@ -41,7 +41,7 @@ int main()
     output(nRoots, x1, x2);
 }
 
-int input(double *a, double *b, double *c)
+void input(double *a, double *b, double *c)
 {
     printf("Эта программа решает уравнение вида ax2+bx+c=0\n");      //
     printf("Введите коэфиценты a,b,c\n");
@@ -49,8 +49,6 @@ int input(double *a, double *b, double *c)
     int nRoots = 0;//
 
     scanf("%lg %lg %lg", a, b, c);
-
-    return 0; // void
 }
 
 int solver(double a, double b, double c, double *x1, double *x2)
