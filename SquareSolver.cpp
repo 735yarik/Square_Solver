@@ -4,15 +4,8 @@
 #include <math.h>
 
 // TODO codestyle
-// TODO git
 
-// epsilon - 1e-10;
-// abs(value) < eps   bool
-
-
-// TODO читать про switch и все остальное     if  и определени€ функций
-// TODO разбить на функции input solver output
-                     // TODO rename file
+// TODO читать про switch и все остальное     if
 
 const int INF_ROOTS = -1;
 const int ZERO_ROOTS = 0;
@@ -22,7 +15,7 @@ const float EPSILON = 1e-10;
 
 void input(double *a, double *b, double *c);
 int solver(double a, double b, double c, double *x1, double *x2);
-int output(int nRoots, double x1, double x2);
+void output(int nRoots, double x1, double x2);
 bool comparator(double num);
 
 int main()
@@ -39,16 +32,19 @@ int main()
     input(&a, &b, &c);
     nRoots = solver(a, b, c, &x1, &x2);
     output(nRoots, x1, x2);
+
 }
 
 void input(double *a, double *b, double *c)
 {
+
     printf("Ёта программа решает уравнение вида ax2+bx+c=0\n");      //
     printf("¬ведите коэфиценты a,b,c\n");
 
     int nRoots = 0;//
 
     scanf("%lg %lg %lg", a, b, c);
+
 }
 
 int solver(double a, double b, double c, double *x1, double *x2)
@@ -79,14 +75,15 @@ int solver(double a, double b, double c, double *x1, double *x2)
     else
     {
         double discriminant = b*b - 4*a*c;
-        if (discriminant > EPSILON)   // zero?
+        if (discriminant > EPSILON)
         {
 
             *x1 = (- b + sqrt(discriminant)) / (2*a);
             *x2 = (- b - sqrt(discriminant)) / (2*a);
 
             return TWO_ROOTS;
-            }
+
+        }
         else
             if (comparator(discriminant))
             {
@@ -101,24 +98,30 @@ int solver(double a, double b, double c, double *x1, double *x2)
 
 }
 
-int output(int nRoots, double x1, double x2)
+void output(int nRoots, double x1, double x2)
 {
+    nRoots=33;
     switch(nRoots)
         {
         case ZERO_ROOTS:
             printf("EQUATION HAS NO ROOTS");
             break;
 
-        case ONE_ROOT: printf("EQUATION HAS 1 ROOT:x = %lg" ,x1);
-                break;
+        case ONE_ROOT:
+            printf("EQUATION HAS 1 ROOT:x = %lg" ,x1);
+            break;
 
-        case TWO_ROOTS: printf("EQUATION HAS 2 ROOTS:x1 = %lg, x2 = %lg", x1, x2);
-                break;
+        case TWO_ROOTS:
+            printf("EQUATION HAS 2 ROOTS:x1 = %lg, x2 = %lg", x1, x2);
+            break;
 
-        case INF_ROOTS: printf("EQUATION HAS INF ROOTS");    // default
+        case INF_ROOTS:
+            printf("EQUATION HAS INF ROOTS");
+            break;
+        default:
+            printf("ERROR");
         }
 
-    return 0;    //
 }
 
 bool comparator(double num)
