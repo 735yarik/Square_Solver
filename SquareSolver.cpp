@@ -6,7 +6,6 @@
 
 // TODO codestyle, assert
 // TODO doxygen
-// TODO enum
 
 enum roots_values
 {
@@ -61,10 +60,6 @@ void input(double *a, double *b, double *c)
         buffer_clean();
 
     }
-
-    assert(isfinite(*a));
-    assert(isfinite(*b));
-    assert(isfinite(*c));
 
 }
 
