@@ -2,32 +2,36 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <assert.h>
 
-// TODO codestyle
+// TODO codestyle, assert
 
-// TODO читать про switch и все остальное     if
+// TODO check input(buffer input, while, getc, getchar)
+// TODO doxygen
 
-const int INF_ROOTS = -1;
-const int ZERO_ROOTS = 0;
-const int ONE_ROOT = 1;
-const int TWO_ROOTS = 2;
-const float EPSILON = 1e-10;
+const int  INF_ROOTS  = -1;
+const int ZERO_ROOTS  = 0;
+const int ONE_ROOT    = 1;
+const int TWO_ROOTS   = 2;
+const float EPSILON   = 1e-10;
 
 void input(double *a, double *b, double *c);
 int solver(double a, double b, double c, double *x1, double *x2);
+int linear_solver(double b, double c, double *x1, double *x2);
+int square_solver(double a, double b, double c, double *x1, double *x2);
 void output(int nRoots, double x1, double x2);
-bool comparator(double num);
+bool is_zero(double num);
 
 int main()
 {
 
-    double a = 0;
-    double b = 0;
-    double c = 0;
-    double x1 = 0;
-    double x2 = 0;
+    double a = NAN;
+    double b = NAN;
+    double c = NAN;
+    double x1 = NAN;
+    double x2 = NAN;
 
-    int nRoots = 0;
+    int nRoots = NAN;
 
     input(&a, &b, &c);
     nRoots = solver(a, b, c, &x1, &x2);
@@ -37,70 +41,121 @@ int main()
 
 void input(double *a, double *b, double *c)
 {
+    assert(a != NULL);
+    assert(b != NULL);
+    assert(c != NULL);
 
-    printf("Ёта программа решает уравнение вида ax2+bx+c=0\n");      //
+    printf("Ёта программа решает уравнение вида ax2+bx+c=0\n");
     printf("¬ведите коэфиценты a,b,c\n");
 
-    int nRoots = 0;//
+    while (scanf("%lg %lg %lg", a, b, c) != 3)
+    {
 
-    scanf("%lg %lg %lg", a, b, c);
+        printf("введите корректные числа\n");
+
+        while (getchar() != '\n')                             // ' or  " ?
+        {}
+    }
+
+    assert(isfinite(*a));
+    assert(isfinite(*b));
+    assert(isfinite(*c));
+
 
 }
 
 int solver(double a, double b, double c, double *x1, double *x2)
 {
-                                        // codestyle 2 + 3
-    int nRoots = 0;
 
-    if (comparator(a))
+    assert(x1 != x2);
+    assert(x1 != NULL);
+    assert(x2 != NULL);
+    assert(isfinite(a));
+    assert(isfinite(b));
+    assert(isfinite(c));
+
+    if (is_zero(a))
     {
-        if (comparator(b))
+        linear_solver(b, c, x1, x1);
+    }
+    else
+    {
+        square_solver(a, b, c, x1, x2);
+    }
+
+}
+
+int square_solver(double a, double b, double c, double *x1, double *x2)
+{
+
+    assert(x1 != x2);
+    assert(x1 != NULL);
+    assert(x2 != NULL);
+    assert(isfinite(a));
+    assert(isfinite(b));
+    assert(isfinite(c));
+
+    double discriminant = b * b - 4 * a * c;
+
+    if (discriminant > EPSILON)
+    {
+
+        *x1 = (- b + sqrt(discriminant)) / (2 * a);
+        *x2 = (- b - sqrt(discriminant)) / (2 * a);
+
+        return TWO_ROOTS;
+
+    }
+    else
+    {
+        if (is_zero(discriminant))
         {
-            if (comparator(c))
-            {
-                return INF_ROOTS;
-            }
-            else
-            {
-                return ZERO_ROOTS;
-            }
+
+            *x1 = (-b) / (2 * a);
+
+            return ONE_ROOT;
+
         }
         else
         {
-            *x1 = (-c) / b;
+            return ZERO_ROOTS;
+        }
+    }
 
-            return ONE_ROOT;
+}
+
+int linear_solver(double b, double c, double *x1, double *x2)
+{
+
+    assert(x1 != x2);
+    assert(x1 != NULL);
+    assert(x2 != NULL);
+    assert(isfinite(b));
+    assert(isfinite(c));
+
+    if (is_zero(b))
+    {
+        if (is_zero(c))
+        {
+            return INF_ROOTS;
+        }
+        else
+        {
+            return ZERO_ROOTS;
         }
     }
     else
     {
-        double discriminant = b*b - 4*a*c;
-        if (discriminant > EPSILON)
-        {
+        *x1 = - c / b;
 
-            *x1 = (- b + sqrt(discriminant)) / (2*a);
-            *x2 = (- b - sqrt(discriminant)) / (2*a);
-
-            return TWO_ROOTS;
-
-        }
-        else
-            if (comparator(discriminant))
-            {
-
-                *x1=(-b) / (2*a);
-
-                return ONE_ROOT;
-            }
-            else
-                return ZERO_ROOTS;
+        return ONE_ROOT;
     }
 
 }
 
 void output(int nRoots, double x1, double x2)
 {
-    nRoots=33;
+
     switch(nRoots)
         {
         case ZERO_ROOTS:
@@ -118,16 +173,19 @@ void output(int nRoots, double x1, double x2)
         case INF_ROOTS:
             printf("EQUATION HAS INF ROOTS");
             break;
+
         default:
-            printf("ERROR");
+            printf("ERROR IN ROOTS NUMBER");
         }
 
 }
 
-bool comparator(double num)
+bool is_zero(double num)
 {
-    if (fabs(num) < EPSILON)
+
+    if (fabs(num) <= EPSILON)
         return true;
-    else
-        return false;
+    return false;
+
 }
+
