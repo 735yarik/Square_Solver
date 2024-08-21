@@ -9,6 +9,7 @@
 // TODO enum
 
 enum roots_values {INF_ROOTS = -1, ZERO_ROOTS = 0, ONE_ROOT = 1, TWO_ROOTS = 2};
+
 const float EPSILON   = 1e-10;
 
 void input(double *a, double *b, double *c);
@@ -37,6 +38,7 @@ int main()
 
 void input(double *a, double *b, double *c)
 {
+
     assert(a != NULL);
     assert(b != NULL);
     assert(c != NULL);
@@ -57,7 +59,6 @@ void input(double *a, double *b, double *c)
     assert(isfinite(*a));
     assert(isfinite(*b));
     assert(isfinite(*c));
-
 
 }
 
@@ -105,6 +106,7 @@ int square_solver(double a, double b, double c, double *x1, double *x2)
     }
     else
     {
+
         if (is_zero(discriminant))
         {
 
@@ -114,9 +116,10 @@ int square_solver(double a, double b, double c, double *x1, double *x2)
 
         }
         else
-        {
-            return ZERO_ROOTS;
-        }
+        {                                           //codestyle?
+            return ZERO_ROOTS;                      //
+        }                                           //
+
     }
 
 }
@@ -132,6 +135,7 @@ int linear_solver(double b, double c, double *x1, double *x2)
 
     if (is_zero(b))
     {
+
         if (is_zero(c))
         {
             return INF_ROOTS;
@@ -140,12 +144,15 @@ int linear_solver(double b, double c, double *x1, double *x2)
         {
             return ZERO_ROOTS;
         }
+
     }
     else
     {
+
         *x1 = - c / b;
 
         return ONE_ROOT;
+
     }
 
 }
