@@ -28,7 +28,7 @@ enum modes
 
 const double EPSILON   = 1e-10;
 
-struct test_coef
+struct Coef
 {
 
     double a;
@@ -47,7 +47,7 @@ struct test_roots
 
 };
 
-void input(double *a, double *b, double *c);
+void input(Coef *abc);
 
 int  solver(double a, double b, double c, double *x1, double *x2);
 int  linear_solver(double b, double c, double *x1, double *x2);
@@ -58,49 +58,48 @@ void output(int nRoots, double x1, double x2);
 void buffer_clean();
 bool is_zero(double num);
 bool is_equal(double num1, double num2);
-int  unit_test(test_coef coef_values, test_roots roots_values);
+int  unit_test(Coef coef_values, test_roots roots_values);
 int  execute_tests();
 int  solver_or_test_mode();
 void test_mode();
-void solver_mode(double a, double b, double c, double *x1, double *x2);
+void solver_mode();
 
 int main()
 {
-
-    double a   = NAN;
-    double b   = NAN;
-    double c   = NAN;
-
-    double x1  = NAN;
-    double x2  = NAN;
-
-    int nRoots = 0;
 
     int mode = solver_or_test_mode();
 
     switch(mode)
         {
         case TEST_MODE:
+
+            printf("TEST_MODE\n");
             test_mode();
             break;
+
         case SOLVER_MODE:
-            solver_mode(a, b, c, &x1, &x2);
+
+            printf("SOLVER_MODE\n");
+            solver_mode();
             break;
+
         }
 
 }
 
-void input(double *a, double *b, double *c)
+void input(Coef *abc) //struct Coef abc
 {
 
-    assert(a != NULL);
-    assert(b != NULL);
-    assert(c != NULL);
+    assert(abc->a != NULL);
+    assert(abc->b != NULL);
+    assert(abc->c != NULL);
+
+    //
 
     printf("Ёта программа решает уравнение вида ax2+bx+c=0\n");
     printf("¬ведите коэфиценты a,b,c\n");
 
-    while (scanf("%lg %lg %lg", a, b, c) != 3)
+    while (scanf("%lg %lg %lg", abc->a, abc->b, abc->c) != 3)
     {
 
         printf("введите корректные числа\n");
@@ -280,7 +279,7 @@ void buffer_clean()
 
 }
 
-int unit_test(test_coef coef_values, test_roots roots_values)
+int unit_test(Coef coef_values, test_roots roots_values)
 {
 
     double x1 = NAN;
@@ -316,10 +315,10 @@ int unit_test(test_coef coef_values, test_roots roots_values)
 int execute_tests()
 {
 
-    test_coef  test_coef1 = {1,  1,  1};
-    test_coef  test_coef2 = {0,  6, 12};
-    test_coef  test_coef3 = {1, -3,  2};
-    test_coef  test_coef4 = {0,  0,  0};
+    Coef  test_coef1 = {1,  1,  1};
+    Coef  test_coef2 = {0,  6, 12};
+    Coef  test_coef3 = {1, -3,  2};
+    Coef  test_coef4 = {0,  0,  0};
 
     test_roots test_roots1 = { 0,  0, ZERO_ROOTS};
     test_roots test_roots2 = {-2, -2, ONE_ROOT};
@@ -336,7 +335,7 @@ int execute_tests()
 }
 
 int solver_or_test_mode()
-    {
+{
 
     char ch1, ch2;
     bool flag;
@@ -355,22 +354,15 @@ int solver_or_test_mode()
 
         if (ch1 == 'T' && ch2 == '\n')
         {
-
-            printf("TEST_MODE\n");
             return TEST_MODE;
-
         }
         else if (ch1 == 'S' && ch2 == '\n')
-             {
+            {
+                return SOLVER_MODE;
+            }
 
-                 printf("SOLVER_MODE\n");
-                 return SOLVER_MODE;
-
-             }
-
-
-             else
-             {
+            else
+            {
 
                 if (ch2 != '\n')
                 {
@@ -380,7 +372,7 @@ int solver_or_test_mode()
                 printf("¬ведите корректный ответ\n");
                 flag = true;
 
-             }
+            }
 
     } while(flag);
 
@@ -391,13 +383,22 @@ void test_mode()
     execute_tests();
 }
 
-void solver_mode(double a, double b, double c, double *x1, double *x2)
+void solver_mode()
 {
+
+    Coef  abc = {NAN,  NAN,  NAN};
+
+    double a   = NAN;
+    double b   = NAN;
+    double c   = NAN;
+
+    double x1  = NAN;
+    double x2  = NAN;
 
     int nRoots = 0;
 
-    input(&a, &b, &c);
-    nRoots = solver(a, b, c, x1, x2);
-    output(nRoots, *x1, *x2);
+    input(Coef &abc);
+    nRoots = solver(a, b, c, &x1, &x2);
+    output(nRoots, x1, x2);
 
 }
