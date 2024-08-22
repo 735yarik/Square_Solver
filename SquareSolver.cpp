@@ -9,17 +9,19 @@
 
 enum roots_values
 {
+
     INF_ROOTS  = -1,
     ZERO_ROOTS = 0,
     ONE_ROOT   = 1,
     TWO_ROOTS  = 2
+
 };
 
 const float EPSILON   = 1e-10;
 
 void input(double *a, double *b, double *c);
 int solver(double a, double b, double c, double *x1, double *x2);
-int linear_solver(double b, double c, double *x1, double *x2);
+int linear_solver(double b, double c, double *x1);
 int square_solver(double a, double b, double c, double *x1, double *x2);
 void output(int nRoots, double x1, double x2);
 void buffer_clean();
@@ -75,7 +77,7 @@ int solver(double a, double b, double c, double *x1, double *x2)
 
     if (is_zero(a))
     {
-        linear_solver(b, c, x1, x1);
+        linear_solver(b, c, x1);
     }
     else
     {
@@ -94,43 +96,53 @@ int square_solver(double a, double b, double c, double *x1, double *x2)
     assert(isfinite(b));
     assert(isfinite(c));
 
-    double discriminant = b * b - 4 * a * c;
-
-    if (discriminant > EPSILON)
+    if (c == 0)
     {
 
-        *x1 = (- b + sqrt(discriminant)) / (2 * a);
-        *x2 = (- b - sqrt(discriminant)) / (2 * a);
-
+        linear_solver(a, b, x1);
+        *x2 = 0;                                         //why * ??????
         return TWO_ROOTS;
 
     }
     else
     {
 
-        if (is_zero(discriminant))
+        double discriminant = b * b - 4 * a * c;
+
+        if (discriminant > EPSILON)
         {
 
-            *x1 = (-b) / (2 * a);
+            *x1 = (- b + sqrt(discriminant)) / (2 * a);
+            *x2 = (- b - sqrt(discriminant)) / (2 * a);
 
-            return ONE_ROOT;
+            return TWO_ROOTS;
 
         }
         else
-        {                                           //codestyle?
-            return ZERO_ROOTS;                      //
-        }                                           //
+        {
+
+            if (is_zero(discriminant))
+            {
+
+                *x1 = (-b) / (2 * a);
+
+                return ONE_ROOT;
+
+            }
+            else
+            {                                           //codestyle?
+                return ZERO_ROOTS;                      //
+            }                                           //
+
+        }
 
     }
-
 }
 
-int linear_solver(double b, double c, double *x1, double *x2)
+int linear_solver(double b, double c, double *x1)         //deleted x2?
 {
 
-    assert(x1 != x2);
     assert(x1 != NULL);
-    assert(x2 != NULL);
     assert(isfinite(b));
     assert(isfinite(c));
 
