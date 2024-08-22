@@ -5,7 +5,8 @@
 #include <assert.h>
 
 // TODO codestyle
-// TODO doxygen
+
+// TODO read assert, doxygen
 
 enum roots_values
 {
@@ -17,52 +18,75 @@ enum roots_values
 
 };
 
-const float EPSILON   = 1e-10;
+enum modes
+{
+
+    TEST_MODE    = 0,
+    SOLVER_MODE  = 1,
+
+};
+
+const double EPSILON   = 1e-10;
+
+struct test_coef
+{
+
+    double a;
+    double b;
+    double c;
+
+};
+
+struct test_roots
+{
+
+    double x1_exp;
+    double x2_exp;
+
+    int nRoots_exp;
+
+};
 
 void input(double *a, double *b, double *c);
-int solver(double a, double b, double c, double *x1, double *x2);
-int linear_solver(double b, double c, double *x1);
-int square_solver(double a, double b, double c, double *x1, double *x2);
+
+int  solver(double a, double b, double c, double *x1, double *x2);
+int  linear_solver(double b, double c, double *x1, double *x2);
+int  square_solver(double a, double b, double c, double *x1, double *x2);
+
 void output(int nRoots, double x1, double x2);
+
 void buffer_clean();
 bool is_zero(double num);
-int test(double a, double b, double c, double x1_exp, double x2_exp, int nRoots_exp);
+bool is_equal(double num1, double num2);
+int  unit_test(test_coef coef_values, test_roots roots_values);
+int  execute_tests();
+int  solver_or_test_mode();
+void test_mode();
+void solver_mode(double a, double b, double c, double *x1, double *x2);
 
 int main()
 {
 
-    double a = NAN;
-    double b = NAN;
-    double c = NAN;
-    double x1 = NAN;
-    double x2 = NAN;
+    double a   = NAN;
+    double b   = NAN;
+    double c   = NAN;
 
-/*    struct test_data
-    {
-        double a;
-        double b;
-        double c;
-        double x1_exp;
-        double x2_exp;
-        in nRoots_exp;
-    }
+    double x1  = NAN;
+    double x2  = NAN;
 
-    test_data test1 = {1, 6, 9, -3, NAN, ONE_ROOT};
-    test_data test2 = {0, 6, 12, -2, NAN, ONE_ROOT};
-    test_data test3 = {0, 0, 0, NAN, NAN, INF_ROOTS};
-    test_data test4 = {1, -3, 2, 1, 2, TWO_ROOTS};
+    int nRoots = 0;
 
-                                                    */
+    int mode = solver_or_test_mode();
 
-    int nRoots = NAN;
-
-    input(&a, &b, &c);
-    nRoots = solver(a, b, c, &x1, &x2);
-    output(nRoots, x1, x2);
-    test(1, 6, 9, -3, NAN, ONE_ROOT);
-    test(0, 6, 12, -2, NAN, ONE_ROOT);
-    test(0, 0, 0, NAN, NAN, INF_ROOTS);
-    test(1, -3, 2, 1, 2, TWO_ROOTS);
+    switch(mode)
+        {
+        case TEST_MODE:
+            test_mode();
+            break;
+        case SOLVER_MODE:
+            solver_mode(a, b, c, &x1, &x2);
+            break;
+        }
 
 }
 
@@ -99,7 +123,7 @@ int solver(double a, double b, double c, double *x1, double *x2)
 
     if (is_zero(a))
     {
-        linear_solver(b, c, x1);
+        linear_solver(b, c, x1, x2);
     }
     else
     {
@@ -121,8 +145,9 @@ int square_solver(double a, double b, double c, double *x1, double *x2)
     if (c == 0)
     {
 
-        linear_solver(a, b, x1);
+        *x1 = (-b) / (2 * a);
         *x2 = 0;
+
         return TWO_ROOTS;
 
     }
@@ -134,8 +159,8 @@ int square_solver(double a, double b, double c, double *x1, double *x2)
         if (discriminant > EPSILON)
         {
 
-            *x1 = (- b + sqrt(discriminant)) / (2 * a);
-            *x2 = (- b - sqrt(discriminant)) / (2 * a);
+            *x1 = (- b - sqrt(discriminant)) / (2 * a);
+            *x2 = (- b + sqrt(discriminant)) / (2 * a);
 
             return TWO_ROOTS;
 
@@ -147,21 +172,26 @@ int square_solver(double a, double b, double c, double *x1, double *x2)
             {
 
                 *x1 = (-b) / (2 * a);
+                *x2 = (-b) / (2 * a);
 
                 return ONE_ROOT;
 
             }
             else
-            {                                           //codestyle?
-                return ZERO_ROOTS;                      //
-            }                                           //
+            {
+
+                *x1 = *x2 = 0;
+
+                return ZERO_ROOTS;
+
+            }
 
         }
 
     }
 }
 
-int linear_solver(double b, double c, double *x1)
+int linear_solver(double b, double c, double *x1, double *x2)
 {
 
     assert(x1 != NULL);
@@ -173,18 +203,26 @@ int linear_solver(double b, double c, double *x1)
 
         if (is_zero(c))
         {
+
+            *x1 = *x2 = 0;
+
             return INF_ROOTS;
+
         }
         else
         {
+
+            *x1 = *x2 = 0;
+
             return ZERO_ROOTS;
+
         }
 
     }
     else
     {
 
-        *x1 = - c / b;
+        *x1 = *x2 = - c / b;
 
         return ONE_ROOT;
 
@@ -222,32 +260,42 @@ void output(int nRoots, double x1, double x2)
 bool is_zero(double num)
 {
 
-    if (fabs(num) <= EPSILON)
+    if (fabs(num) < EPSILON)
         return true;
     return false;
 
 }
 
-void buffer_clean()
+bool is_equal(double num1, double num2)
 {
-    while (getchar() != '\n')
-    {}
+    return is_zero(num1 - num2);
 }
 
-int test(double a, double b, double c, double x1_exp, double x2_exp, int nRoots_exp)
+void buffer_clean()
 {
-    double x1;
-    double x2;
+
+    int ch = 0;
+
+    while ((ch = getchar()) != '\n' && ch != EOF) {}
+
+}
+
+int unit_test(test_coef coef_values, test_roots roots_values)
+{
+
+    double x1 = NAN;
+    double x2 = NAN;
 
     if (
 
-        solver(a, b, c, &x1, &x2) == nRoots_exp &&
-        (x1 == x1_exp || (~isfinite(x1) && ~isfinite(x1_exp))) &&
-        (x2 == x2_exp || (~isfinite(x2) && ~isfinite(x2_exp)))
+        is_equal(solver(coef_values.a, coef_values.b, coef_values.c, &x1, &x2), roots_values.nRoots_exp) &&
+        is_equal(x1, roots_values.x1_exp) &&
+        is_equal(x2, roots_values.x2_exp)
 
         )
     {
         printf("test is passed\n");
+        return 1;
     }
     else
     {
@@ -255,13 +303,101 @@ int test(double a, double b, double c, double x1_exp, double x2_exp, int nRoots_
         printf(
 
               "test is not passed\n"
-              "expected values: x1 = %lg, x2 = %lg, Roots number = %d",
-               x1_exp, x2_exp, nRoots_exp
+              "expected values: x1 = %lg, x2 = %lg, Roots number = %d\n",
+               roots_values.x1_exp, roots_values.x2_exp, roots_values.nRoots_exp
 
              );
+        return 0;
 
     }
 
 }
 
+int execute_tests()
+{
 
+    test_coef  test_coef1 = {1,  1,  1};
+    test_coef  test_coef2 = {0,  6, 12};
+    test_coef  test_coef3 = {1, -3,  2};
+    test_coef  test_coef4 = {0,  0,  0};
+
+    test_roots test_roots1 = { 0,  0, ZERO_ROOTS};
+    test_roots test_roots2 = {-2, -2, ONE_ROOT};
+    test_roots test_roots3 = { 1,  2, TWO_ROOTS};
+    test_roots test_roots4 = { 0,  0, INF_ROOTS};
+
+    unit_test(test_coef1, test_roots1);
+    unit_test(test_coef2, test_roots2);
+    unit_test(test_coef3, test_roots3);
+    unit_test(test_coef4, test_roots4);
+
+    return 0;
+
+}
+
+int solver_or_test_mode()
+    {
+
+    char ch1, ch2;
+    bool flag;
+
+    printf("Какой режим программы Вы хотите использовать?\n"
+           "Напишите Т, чтобы использовать режим тестирования программы\n"
+           "Напишите S, чтобы использовать режим решения квадратных уравнений\n");
+
+    do
+    {
+
+        flag = false;
+
+        ch1 = getchar();
+        ch2 = getchar();
+
+        if (ch1 == 'T' && ch2 == '\n')
+        {
+
+            printf("TEST_MODE\n");
+            return TEST_MODE;
+
+        }
+        else if (ch1 == 'S' && ch2 == '\n')
+             {
+
+                 printf("SOLVER_MODE\n");
+                 return SOLVER_MODE;
+
+             }
+
+
+             else
+             {
+
+                if (ch2 != '\n')
+                {
+                    buffer_clean();
+                }
+
+                printf("Введите корректный ответ\n");
+                flag = true;
+
+             }
+
+    } while(flag);
+
+}
+
+void test_mode()
+{
+    execute_tests();
+}
+
+void solver_mode(double a, double b, double c, double *x1, double *x2)
+{
+
+    int nRoots = 0;
+
+    input(&a, &b, &c);
+    nRoots = solver(a, b, c, x1, x2);
+    output(nRoots, *x1, *x2);
+
+}
