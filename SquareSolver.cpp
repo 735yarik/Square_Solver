@@ -4,7 +4,7 @@
 #include <math.h>
 #include <assert.h>
 
-// TODO codestyle, assert
+// TODO codestyle
 // TODO doxygen
 
 enum roots_values
@@ -26,6 +26,7 @@ int square_solver(double a, double b, double c, double *x1, double *x2);
 void output(int nRoots, double x1, double x2);
 void buffer_clean();
 bool is_zero(double num);
+int test(double a, double b, double c, double x1_exp, double x2_exp, int nRoots_exp);
 
 int main()
 {
@@ -36,11 +37,32 @@ int main()
     double x1 = NAN;
     double x2 = NAN;
 
+/*    struct test_data
+    {
+        double a;
+        double b;
+        double c;
+        double x1_exp;
+        double x2_exp;
+        in nRoots_exp;
+    }
+
+    test_data test1 = {1, 6, 9, -3, NAN, ONE_ROOT};
+    test_data test2 = {0, 6, 12, -2, NAN, ONE_ROOT};
+    test_data test3 = {0, 0, 0, NAN, NAN, INF_ROOTS};
+    test_data test4 = {1, -3, 2, 1, 2, TWO_ROOTS};
+
+                                                    */
+
     int nRoots = NAN;
 
     input(&a, &b, &c);
     nRoots = solver(a, b, c, &x1, &x2);
     output(nRoots, x1, x2);
+    test(1, 6, 9, -3, NAN, ONE_ROOT);
+    test(0, 6, 12, -2, NAN, ONE_ROOT);
+    test(0, 0, 0, NAN, NAN, INF_ROOTS);
+    test(1, -3, 2, 1, 2, TWO_ROOTS);
 
 }
 
@@ -100,7 +122,7 @@ int square_solver(double a, double b, double c, double *x1, double *x2)
     {
 
         linear_solver(a, b, x1);
-        *x2 = 0;                                         //why * ??????
+        *x2 = 0;
         return TWO_ROOTS;
 
     }
@@ -139,7 +161,7 @@ int square_solver(double a, double b, double c, double *x1, double *x2)
     }
 }
 
-int linear_solver(double b, double c, double *x1)         //deleted x2?
+int linear_solver(double b, double c, double *x1)
 {
 
     assert(x1 != NULL);
@@ -176,23 +198,23 @@ void output(int nRoots, double x1, double x2)
     switch(nRoots)
         {
         case ZERO_ROOTS:
-            printf("EQUATION HAS NO ROOTS");
+            printf("EQUATION HAS NO ROOTS\n");
             break;
 
         case ONE_ROOT:
-            printf("EQUATION HAS 1 ROOT:x = %lg" ,x1);
+            printf("EQUATION HAS 1 ROOT:x = %lg\n" ,x1);
             break;
 
         case TWO_ROOTS:
-            printf("EQUATION HAS 2 ROOTS:x1 = %lg, x2 = %lg", x1, x2);
+            printf("EQUATION HAS 2 ROOTS:x1 = %lg, x2 = %lg\n", x1, x2);
             break;
 
         case INF_ROOTS:
-            printf("EQUATION HAS INF ROOTS");
+            printf("EQUATION HAS INF ROOTS\n");
             break;
 
         default:
-            printf("ERROR IN ROOTS NUMBER");
+            printf("ERROR IN ROOTS NUMBER\n");
         }
 
 }
@@ -208,9 +230,38 @@ bool is_zero(double num)
 
 void buffer_clean()
 {
-    while (getchar() != '\n')                             // ' or  " ?
+    while (getchar() != '\n')
     {}
 }
 
+int test(double a, double b, double c, double x1_exp, double x2_exp, int nRoots_exp)
+{
+    double x1;
+    double x2;
+
+    if (
+
+        solver(a, b, c, &x1, &x2) == nRoots_exp &&
+        (x1 == x1_exp || (~isfinite(x1) && ~isfinite(x1_exp))) &&
+        (x2 == x2_exp || (~isfinite(x2) && ~isfinite(x2_exp)))
+
+        )
+    {
+        printf("test is passed\n");
+    }
+    else
+    {
+
+        printf(
+
+              "test is not passed\n"
+              "expected values: x1 = %lg, x2 = %lg, Roots number = %d",
+               x1_exp, x2_exp, nRoots_exp
+
+             );
+
+    }
+
+}
 
 
