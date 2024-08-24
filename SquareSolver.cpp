@@ -67,32 +67,11 @@ int  execute_tests();
 int  solver_or_test_mode();
 void test_mode();
 void solver_mode();
-
-// menu
+void menu();
 
 int main()
 {
-
-    int mode = solver_or_test_mode();
-
-    switch(mode)
-        {
-        case TEST_MODE:
-
-            printf("\nTEST_MODE\n\n");
-            test_mode();
-            break;
-
-        case SOLVER_MODE:
-
-            printf("\nSOLVER_MODE\n\n");
-            solver_mode();
-            break;
-
-        default:
-            printf("default case\n");
-        }
-
+    menu();
 }
 
 void input(Coefficients *coefs)
@@ -400,3 +379,30 @@ void solver_mode()
     output(roots.nRoots, roots.x1, roots.x2);
 
 }
+
+void menu()
+{
+
+    int mode = solver_or_test_mode();
+
+    switch(mode)
+        {
+        case TEST_MODE:
+
+            printf("\nTEST_MODE\n\n");
+            test_mode();
+            break;
+
+        case SOLVER_MODE:
+
+            printf("\nSOLVER_MODE\n\n");
+            solver_mode();
+            break;
+
+        default:
+            printf("default case\n");
+        }
+
+}
+
+
