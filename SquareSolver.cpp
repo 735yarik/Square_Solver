@@ -1,5 +1,7 @@
 #include <TXLib.h>
 
+#include <assert.h>
+
 // TODO codestyle
 
 // TODO read doxygen
@@ -35,12 +37,6 @@ struct Coefficients
 
 };
 
-/*struct test
-{
-    struct coef
-    struct roots
-}  */
-
 struct Roots
 {
 
@@ -51,10 +47,16 @@ struct Roots
 
 };
 
+struct Test
+{
+    Coefficients coefs;
+    Roots roots;
+};
+
 void input(Coefficients *coefs);
 
 void solver(Coefficients coefs, Roots *roots);
-int  linear_solver(Coefficients coefs, double *x1, int *nRoots);
+int  linear_solver(double b, double c, double *x1, int *nRoots);
 void square_solver(Coefficients coefs, Roots *roots);
 
 void output(int nRoots, double x1, double x2);
@@ -62,7 +64,7 @@ void output(int nRoots, double x1, double x2);
 void buffer_clean();
 bool is_zero(double num);
 bool is_equal(double num1, double num2);
-int  unit_test(Coefficients coefs, Roots exp);
+int  unit_test(Test test);
 int  execute_tests();
 int  solver_or_test_mode();
 void test_mode();
@@ -80,7 +82,7 @@ void input(Coefficients *coefs)
     assert(coefs != NULL);
 
     printf("Эта программа решает уравнение вида ax2+bx+c=0\n");
-    printf("Введите коэфиценты a,b,c\n");
+    printf("Введите коэфиценты a,b,c\n\n");
 
     while (scanf("%lg %lg %lg", &coefs->a, &coefs->b, &coefs->c) != 3)            //
     {
@@ -103,7 +105,7 @@ void solver(Coefficients coefs, Roots *roots)
     if (is_zero(coefs.a))
     {
 
-        linear_solver(coefs, &(roots->x1), &(roots->nRoots));
+        linear_solver(coefs.b, coefs.c, &(roots->x1), &(roots->nRoots));
 
         roots->x2 = roots->x1;
 
@@ -127,7 +129,7 @@ void square_solver(Coefficients coefs, Roots *roots)
 
         roots->x1 = roots->x2 = (-coefs.b) / (2 * coefs.a);
 
-        roots->nRoots = TWO_ROOTS;
+        roots->nRoots = TWO_ROOTS;                               //TWO??
 
     }
     else
@@ -171,17 +173,17 @@ void square_solver(Coefficients coefs, Roots *roots)
 
 }
 
-int linear_solver(Coefficients coefs, double *x1, int *nRoots)       // bc only
+int linear_solver(double b, double c, double *x1, int *nRoots)
 {
 
     assert(x1 != NULL);
-    assert(isfinite(coefs.b));
-    assert(isfinite(coefs.c));
+    assert(isfinite(b));
+    assert(isfinite(c));
 
-    if (is_zero(coefs.b))
+    if (is_zero(b))
     {
 
-        if (is_zero(coefs.c))
+        if (is_zero(c))
         {
 
             *x1 = 0;
@@ -202,7 +204,7 @@ int linear_solver(Coefficients coefs, double *x1, int *nRoots)       // bc only
     else
     {
 
-        *x1 = - coefs.c / coefs.b;
+        *x1 = - c / b;
 
         *nRoots = ONE_ROOT;
 
@@ -260,20 +262,21 @@ void buffer_clean()
 
 }
 
-int unit_test(Coefficients coefs, Roots exp)
+int unit_test(Test test)
 {
 
     Roots roots = {NAN, NAN, 0};
 
-    solver(coefs, &roots);
+    solver(test.coefs, &roots);
 
     if (
 
-        is_equal(roots.nRoots, exp.nRoots) &&
-        is_equal(roots.x1, exp.x1) &&
-        is_equal(roots.x2, exp.x2)
+        is_equal(roots.nRoots, (test.roots).nRoots) &&
+        is_equal(roots.x1, (test.roots).x1) &&
+        is_equal(roots.x2, (test.roots).x2)
 
         )
+
     {
         printf("test is passed\n\n");
         return 1;
@@ -286,7 +289,7 @@ int unit_test(Coefficients coefs, Roots exp)
               "test is not passed\n"
               "expected values: x1 = %lg, x2 = %lg, Roots number = %d\n"
               "real values:     x1 = %lg, x2 = %lg, Roots number = %d\n\n",
-               exp.x1, exp.x2, exp.nRoots, roots.x1, roots.x2, roots.nRoots
+               (test.roots).x1, (test.roots).x2, (test.roots).nRoots, roots.x1, roots.x2, roots.nRoots
 
              );
         return 0;
@@ -310,10 +313,15 @@ int execute_tests()
     Roots roots3 = { 1,  2, TWO_ROOTS};
     Roots roots4 = { 0,  0, INF_ROOTS};
 
-    unit_test(coef1, roots1);
-    unit_test(coef2, roots2);
-    unit_test(coef3, roots3);
-    unit_test(coef4, roots4);
+    Test test1 = {coef1, roots1};
+    Test test2 = {coef2, roots2};
+    Test test3 = {coef3, roots3};
+    Test test4 = {coef4, roots4};
+
+    unit_test(test1);
+    unit_test(test2);
+    unit_test(test3);
+    unit_test(test4);
 
     return 0;
 
@@ -404,5 +412,3 @@ void menu()
         }
 
 }
-
-
