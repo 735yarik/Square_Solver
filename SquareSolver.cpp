@@ -27,6 +27,7 @@ enum modes
 };
 
 const double EPSILON = 1e-7;
+const int MAX_TESTS  = 4;
 
 struct Coefficients
 {
@@ -127,9 +128,10 @@ void square_solver(Coefficients coefs, Roots *roots)
     if (is_zero(coefs.c))
     {
 
-        roots->x1 = roots->x2 = (-coefs.b) / (2 * coefs.a);
+        roots->x1 = (-coefs.b) / (coefs.a);
+        roots->x2 = 0;
 
-        roots->nRoots = TWO_ROOTS;                               //TWO??
+        roots->nRoots = TWO_ROOTS;
 
     }
     else
@@ -303,7 +305,9 @@ int unit_test(Test test)
 int execute_tests()
 {
 
-    Coefficients coef1 = {1,  1,  1};
+    int counter = 0;
+
+    Coefficients coef1 = {1,  1,  1};                //simplify??
     Coefficients coef2 = {0,  6, 12};
     Coefficients coef3 = {1, -3,  2};
     Coefficients coef4 = {0,  0,  0};
@@ -318,10 +322,19 @@ int execute_tests()
     Test test3 = {coef3, roots3};
     Test test4 = {coef4, roots4};
 
-    unit_test(test1);
-    unit_test(test2);
-    unit_test(test3);
-    unit_test(test4);
+    Test tests[MAX_TESTS] = {
+
+                            test1,
+                            test2,
+                            test3,
+                            test4
+
+                            };
+
+    for (counter = 0; counter < MAX_TESTS; counter++)
+    {
+        unit_test(tests[counter]);
+    }
 
     return 0;
 
