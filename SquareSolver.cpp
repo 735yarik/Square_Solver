@@ -1,12 +1,14 @@
-#include <TXLib.h>
+///@file SquareSolver.cpp
 
-#include <assert.h>
+#include <TXLib.h>
 
 // TODO codestyle
 
-// TODO read doxygen
-// TODO read раздельную компил€цию перед понедельником
-// TODO read разбиение на файлы перед понедельником
+// TODO read раздельную компил€цию перед понедельником делать
+// TODO read разбиение на файлы перед понедельником делать
+// TODO препроцессор                  2
+// TODO аргументы командной строки делать   3
+// TODO символьные строки
 
 enum roots_values
 {
@@ -29,53 +31,77 @@ enum modes
 const double EPSILON = 1e-7;
 const int MAX_TESTS  = 4;
 
-struct Coefficients
+struct Coefficients                    /// struct contains coefficients a, b, c
 {
 
-    double a;
-    double b;
-    double c;
+    double a;                          /// a-coefficient
+    double b;                          /// b-coefficient
+    double c;                          /// c-coefficient
 
 };
 
-struct Roots
+struct Roots                           /// struct contains roots and number of roots
 {
 
-    double x1;
-    double x2;
+    double x1;                         /// 1st root
+    double x2;                         /// 2nd root
 
-    int nRoots;
+    int nRoots;                        /// number of roots
 
 };
 
-struct Test
+struct Test                            /// struct contains two other structs: Coefficients, Roots
 {
-    Coefficients coefs;
-    Roots roots;
+
+    Coefficients coefs;                /// struct contains coefficients a, b, c
+    Roots roots;                       /// struct contains roots and number of roots
+
 };
 
 void input(Coefficients *coefs);
+void output(Roots roots);
 
+void menu();
+int  solver_or_test_mode();
+
+void solver_mode();
 void solver(Coefficients coefs, Roots *roots);
-int  linear_solver(double b, double c, double *x1, int *nRoots);
+int  linear_solver(double b, double c, double *x1);
 void square_solver(Coefficients coefs, Roots *roots);
 
-void output(int nRoots, double x1, double x2);
+void test_mode();
+int  unit_test(Test test);
+void  execute_tests();
 
 void buffer_clean();
 bool is_zero(double num);
 bool is_equal(double num1, double num2);
-int  unit_test(Test test);
-int  execute_tests();
-int  solver_or_test_mode();
-void test_mode();
-void solver_mode();
-void menu();
+
+/**
+* @brief Solves a square equation ax2 + bx + c = 0
+*
+* @param [in] a a-coefficient
+* @param [in] b b-coefficient
+* @param [in] c c-coe fficient
+* @param [out] x1 Pointer to the 1st root
+* @param [out] x2 Pointer to the 2nd root
+*
+* @return Number of roots
+*
+* @note In case of infinite number of roots,
+* returns SS_INF_ROOTS.
+*/
 
 int main()
 {
+    printf("%s", "\033[1;32m");
+
     menu();
 }
+
+/**
+* @brief accepts struct that contains 3 coefficients: a, b, c
+*/
 
 void input(Coefficients *coefs)
 {
@@ -96,8 +122,17 @@ void input(Coefficients *coefs)
 
 }
 
+/**
+* @brief solves equation using linear_solver or square_solver
+*
+* @param [in] coefs struct contains 3 coefficients
+* @param [in] roots struct contains roots and number of roots
+*/
+                                                //*roots??
 void solver(Coefficients coefs, Roots *roots)
 {
+
+    assert(roots != NULL);
 
     assert(isfinite(coefs.a));
     assert(isfinite(coefs.b));
@@ -106,7 +141,7 @@ void solver(Coefficients coefs, Roots *roots)
     if (is_zero(coefs.a))
     {
 
-        linear_solver(coefs.b, coefs.c, &(roots->x1), &(roots->nRoots));
+        roots->nRoots = linear_solver(coefs.b, coefs.c, &(roots->x1));
 
         roots->x2 = roots->x1;
 
@@ -118,8 +153,17 @@ void solver(Coefficients coefs, Roots *roots)
 
 }
 
+/**
+* @brief solving square equation ax2+bx+c=0 only with a != 0
+*
+* @param [in] coefs struct contains 3 coefficients
+* @param [in] roots struct contains roots and number of roots
+*/
+
 void square_solver(Coefficients coefs, Roots *roots)
 {
+
+    assert(roots != NULL);
 
     assert(isfinite(coefs.a));
     assert(isfinite(coefs.b));
@@ -175,7 +219,17 @@ void square_solver(Coefficients coefs, Roots *roots)
 
 }
 
-int linear_solver(double b, double c, double *x1, int *nRoots)
+/**
+* @brief Solves linear equation bx+c=0
+* @param [in]  b   b-coefficient
+* @param [in]  c   c-coefficient
+* @param [in] *x1  root??
+*
+* @return Number of roots
+*
+* @note   In case of infinite number of roots returns INF_ROOTS
+*/
+int linear_solver(double b, double c, double *x1)
 {
 
     assert(x1 != NULL);
@@ -190,7 +244,7 @@ int linear_solver(double b, double c, double *x1, int *nRoots)
 
             *x1 = 0;
 
-            *nRoots = INF_ROOTS;
+            return INF_ROOTS;
 
         }
         else
@@ -198,7 +252,7 @@ int linear_solver(double b, double c, double *x1, int *nRoots)
 
             *x1 = 0;
 
-            *nRoots = ZERO_ROOTS;
+            return ZERO_ROOTS;
 
         }
 
@@ -208,30 +262,39 @@ int linear_solver(double b, double c, double *x1, int *nRoots)
 
         *x1 = - c / b;
 
-        *nRoots = ONE_ROOT;
+        return ONE_ROOT;
 
     }
 
 }
 
-void output(int nRoots, double x1, double x2)
+/**
+* @brief This function prints how many roots equation has and roots themselves
+*
+* @param [in] roots struct with roots and number of roots
+*/
+void output(Roots roots)
 {
 
-    switch(nRoots)
+    switch(roots.nRoots)
         {
         case ZERO_ROOTS:
+
             printf("\nEQUATION HAS NO ROOTS\n");
             break;
 
         case ONE_ROOT:
-            printf("\nEQUATION HAS 1 ROOT:  x = %lg\n" ,x1);
+
+            printf("\nEQUATION HAS 1 ROOT:  x = %lg\n" ,roots.x1);
             break;
 
         case TWO_ROOTS:
-            printf("\nEQUATION HAS 2 ROOTS:x1 = %lg, x2 = %lg\n", x1, x2);
+
+            printf("\nEQUATION HAS 2 ROOTS:x1 = %lg, x2 = %lg\n", roots.x1, roots.x2);
             break;
 
         case INF_ROOTS:
+
             printf("\nEQUATION HAS INF ROOTS\n");
             break;
 
@@ -240,6 +303,14 @@ void output(int nRoots, double x1, double x2)
         }
 
 }
+
+/**
+* @brief determines if number a zero
+*
+* @param [in] num number
+*
+* @return true if number is a zero and false if it's not
+*/
 
 bool is_zero(double num)
 {
@@ -250,10 +321,23 @@ bool is_zero(double num)
 
 }
 
+/**
+* @brief determines if two numbers equal
+*
+* @param [in] num1 1st number
+* @param [in] num2 2nd number
+*
+* @return true if number is a zero and false if it's not
+*/
+
 bool is_equal(double num1, double num2)
 {
     return is_zero(num1 - num2);
 }
+
+/**
+* @brief cleans buffer
+*/
 
 void buffer_clean()
 {
@@ -263,6 +347,14 @@ void buffer_clean()
     while ((ch = getchar()) != '\n' && ch != EOF) {}
 
 }
+
+/**
+* @brief comparing expected roots and roots given by solver
+*
+* @param [in] test struct with 2 structs: 1st with coefficients and 2nd with expected roots
+*
+* @return returns 1 if test is passed and 0 if it's not
+*/
 
 int unit_test(Test test)
 {
@@ -280,8 +372,10 @@ int unit_test(Test test)
         )
 
     {
+
         printf("test is passed\n\n");
         return 1;
+
     }
     else
     {
@@ -298,11 +392,13 @@ int unit_test(Test test)
 
     }
 
-    return 0;
-
 }
 
-int execute_tests()
+/**
+* @brief executing sires of tests
+*/
+
+void execute_tests()
 {
 
     int counter = 0;
@@ -317,17 +413,17 @@ int execute_tests()
     Roots roots3 = { 1,  2, TWO_ROOTS};
     Roots roots4 = { 0,  0, INF_ROOTS};
 
-    Test test1 = {coef1, roots1};
-    Test test2 = {coef2, roots2};
-    Test test3 = {coef3, roots3};
-    Test test4 = {coef4, roots4};
+    Test test1 = {};
+    Test test2 = {};
+    Test test3 = {};
+    Test test4 = {};
 
     Test tests[MAX_TESTS] = {
 
-                            test1,
-                            test2,
-                            test3,
-                            test4
+                            test1 = {coef1, roots1},
+                            test2 = {coef2, roots2},
+                            test3 = {coef3, roots3},
+                            test4 = {coef4, roots4}
 
                             };
 
@@ -336,9 +432,13 @@ int execute_tests()
         unit_test(tests[counter]);
     }
 
-    return 0;
-
 }
+
+/**
+* @brief asks user which mode to use
+*
+* @return TEST_MODE or SOLVER_MODE
+*/
 
 int solver_or_test_mode()
 {
@@ -382,12 +482,22 @@ int solver_or_test_mode()
 
     } while(flag);
 
+    return -1;
+
 }
+
+/**
+* @brief starting test mode
+*/
 
 void test_mode()
 {
     execute_tests();
 }
+
+/**
+* @brief starting solver mode
+*/
 
 void solver_mode()
 {
@@ -396,10 +506,14 @@ void solver_mode()
     Roots roots = {};
 
     input(&coefs);
-    solver(coefs, &roots);
-    output(roots.nRoots, roots.x1, roots.x2);
+    solver(coefs, &roots);          //
+    output(roots);
 
 }
+
+/**
+* @brief calling test_mode or solver_mode func
+*/
 
 void menu()
 {
