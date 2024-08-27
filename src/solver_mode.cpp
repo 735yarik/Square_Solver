@@ -160,8 +160,14 @@ int linear_solver(const double b, const double c, double *x1)
     }
     else
     {
-
-        *x1 = - c / b;
+        if (is_zero(c))
+        {
+            *x1 = 0;
+        }
+        else
+        {
+            *x1 = - c / b;
+        }
 
         return ONE_ROOT;
 
