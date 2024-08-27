@@ -10,9 +10,9 @@ const double EPSILON = 1e-7;
 
 void buffer_clean();
 
-bool is_zero(double num);
+bool is_zero(const double num);
 
-bool is_equal(double num1, double num2);
+bool is_equal(const double num1, const double num2);
 
 #endif // UTILS_H
 

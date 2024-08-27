@@ -8,7 +8,7 @@
 
 #include "./solver.h"
 
-const int MAX_TESTS  = 4;
+const int MAX_TESTS = 4;
 
 struct Test                            /// struct contains two other structs: Coefficients, Roots
 {

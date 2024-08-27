@@ -10,35 +10,30 @@
 void execute_tests()
 {
 
-    int counter = 0;
-
-    Coefficients coef1 = {1,  1,  1};                //simplify??
+    Coefficients coef1 = {1,  1,  1};
     Coefficients coef2 = {0,  6, 12};
     Coefficients coef3 = {1, -3,  2};
     Coefficients coef4 = {0,  0,  0};
 
-    Roots roots1 = { 0,  0, ZERO_ROOTS};
+    Roots roots1 = { 1,  0, ZERO_ROOTS};
     Roots roots2 = {-2, -2, ONE_ROOT};
     Roots roots3 = { 1,  2, TWO_ROOTS};
     Roots roots4 = { 0,  0, INF_ROOTS};
 
-    Test test1 = {};
-    Test test2 = {};
-    Test test3 = {};
-    Test test4 = {};
+    Test tests[] = {
 
-    Test tests[MAX_TESTS] = {
+                   {coef1, roots1},
+                   {coef2, roots2},
+                   {coef3, roots3},
+                   {coef4, roots4}
 
-                            test1 = {coef1, roots1},
-                            test2 = {coef2, roots2},
-                            test3 = {coef3, roots3},
-                            test4 = {coef4, roots4}
+                   };
 
-                            };
+    size_t tests_size = sizeof(tests) / sizeof(Test);
 
-    for (counter = 0; counter < MAX_TESTS; counter++)
+    for (size_t counter = 0; counter < tests_size; counter++)
     {
-        unit_test(tests[counter]);
+        unit_test(tests[counter]); // pass by pointer
     }
 
 }
@@ -60,7 +55,7 @@ int unit_test(Test test)
 
     if (
 
-        is_equal(roots.nRoots, (test.roots).nRoots) &&
+        roots.nRoots == (test.roots).nRoots &&
         is_equal(roots.x1, (test.roots).x1) &&
         is_equal(roots.x2, (test.roots).x2)
 
@@ -68,7 +63,8 @@ int unit_test(Test test)
 
     {
 
-        printf("test is passed\n\n");
+        printf("\033[1;32mtest is passed\n\n\033[0m");  // it has to be const
+
         return 1;
 
     }
@@ -77,12 +73,13 @@ int unit_test(Test test)
 
         printf(
 
-              "test is not passed\n"
-              "expected values: x1 = %lg, x2 = %lg, Roots number = %d\n"
-              "real values:     x1 = %lg, x2 = %lg, Roots number = %d\n\n",
-               (test.roots).x1, (test.roots).x2, (test.roots).nRoots, roots.x1, roots.x2, roots.nRoots
+                "\033[1;31mtest is not passed\n"
+                "expected values: x1 = %lg, x2 = %lg, Roots number = %d\n"
+                "real values:     x1 = %lg, x2 = %lg, Roots number = %d\n\n\033[0m",
+                (test.roots).x1, (test.roots).x2, (test.roots).nRoots, roots.x1, roots.x2, roots.nRoots
 
              );
+
         return 0;
 
     }

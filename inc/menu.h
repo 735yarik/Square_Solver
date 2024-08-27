@@ -10,6 +10,8 @@
 #include "./input_output.h"
 #include "./tests.h"
 
+const int ERROR_CODE = -1;
+
 enum modes
 {
 

@@ -20,10 +20,11 @@
 
 int main()
 {
-    printf("%s", "\x1b[32mdsavv\x1b[0m");
 
     menu();
+
     return 0;
+
 }
 
 

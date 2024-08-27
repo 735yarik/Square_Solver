@@ -12,8 +12,8 @@ void menu()
 
     int mode = solver_or_test_mode();
 
-    switch(mode)
-        {
+    switch (mode)
+    {
         case TEST_MODE:
 
             printf("\nTEST_MODE\n\n");
@@ -28,7 +28,7 @@ void menu()
 
         default:
             printf("default case\n");
-        }
+    }
 
 }
 
@@ -41,17 +41,15 @@ void menu()
 int solver_or_test_mode()
 {
 
-    int ch1, ch2;
-    bool flag;
+    int ch1 = 0;
+    int ch2 = 0;
 
-    printf("Какой режим программы Вы хотите использовать?\n"
-           "Напишите Т, чтобы использовать режим тестирования программы\n"
-           "Напишите S, чтобы использовать режим решения квадратных уравнений\n");
+    printf("Which mode do you want to use?\n"
+           "Enter Т to use test mode\n"
+           "Enter S to use solver mode\n");
 
-    do
+    while (true)
     {
-
-        flag = false;
 
         ch1 = getchar();
         ch2 = getchar();
@@ -61,26 +59,23 @@ int solver_or_test_mode()
             return TEST_MODE;
         }
         else if (ch1 == 'S' && ch2 == '\n')
+        {
+            return SOLVER_MODE;
+        }
+        else
+        {
+
+            if (ch2 != '\n')
             {
-                return SOLVER_MODE;
+                buffer_clean();
             }
 
-            else
-            {
+            printf("\nEnter correct mode\n");
 
-                if (ch2 != '\n')
-                {
-                    buffer_clean();
-                }
+        }
+    }
 
-                printf("Введите корректный ответ\n");
-                flag = true;
-
-            }
-
-    } while(flag);
-
-    return -1;
+    return ERROR_CODE;
 
 }
 

@@ -12,13 +12,13 @@ void input(Coefficients *coefs)
 
     assert(coefs != NULL);
 
-    printf("Ýòà ïðîãðàììà ðåøàåò óðàâíåíèå âèäà ax2+bx+c=0\n");
-    printf("Ââåäèòå êîýôèöåíòû a,b,c\n\n");
+    printf("This program solves square equations: ax2+bx+c=0\n");
+    printf("Enter coefficients a,b,c\n\n");
 
-    while (scanf("%lg %lg %lg", &coefs->a, &coefs->b, &coefs->c) != 3)            //
+    while (scanf("%lg %lg %lg", &coefs->a, &coefs->b, &coefs->c) != 3)
     {
 
-        printf("ââåäèòå êîððåêòíûå ÷èñëà\n");
+        printf("Enter correct coefficients\n");
 
         buffer_clean();
 

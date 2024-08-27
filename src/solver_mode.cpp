@@ -8,6 +8,8 @@
 * @brief starting solver mode
 */
 
+// check passing structs to functions and const if you don't change data
+
 void solver_mode()
 {
 
@@ -27,7 +29,7 @@ void solver_mode()
 * @param [in] roots struct contains roots and number of roots
 */
 
-void solver(Coefficients coefs, Roots *roots)
+void solver(const Coefficients coefs, Roots *roots)
 {
 
     assert(roots != NULL);
@@ -58,7 +60,7 @@ void solver(Coefficients coefs, Roots *roots)
 * @param [in] roots struct contains roots and number of roots
 */
 
-void square_solver(Coefficients coefs, Roots *roots)
+void square_solver(const Coefficients coefs, Roots *roots)
 {
 
     assert(roots != NULL);
@@ -121,14 +123,14 @@ void square_solver(Coefficients coefs, Roots *roots)
 * @brief Solves linear equation bx+c=0
 * @param [in]  b   b-coefficient
 * @param [in]  c   c-coefficient
-* @param [in] *x1  root??
+* @param [in] x1  root
 *
 * @return Number of roots
 *
 * @note   In case of infinite number of roots returns INF_ROOTS
 */
 
-int linear_solver(double b, double c, double *x1)
+int linear_solver(const double b, const double c, double *x1)
 {
 
     assert(x1 != NULL);

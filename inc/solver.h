@@ -8,13 +8,13 @@
 
 #include "./utils.h"
 
-enum roots_values
+enum roots_values                      /// enumeration of different roots number values
 {
 
-    INF_ROOTS  = -1,
-    ZERO_ROOTS = 0,
-    ONE_ROOT   = 1,
-    TWO_ROOTS  = 2
+    INF_ROOTS  = -1,                   /// infinite roots
+    ZERO_ROOTS = 0,                    /// zero roots
+    ONE_ROOT   = 1,                    /// one root
+    TWO_ROOTS  = 2                     /// two roots
 
 };
 
@@ -39,9 +39,9 @@ struct Roots                           /// struct contains roots and number of r
 
 void solver_mode();
 
-void solver(Coefficients coefs, Roots *roots);
+void solver(const Coefficients coefs, Roots *roots);
 
-int  linear_solver(double b, double c, double *x1);
+int  linear_solver(const double b, const double c, double *x1);
 
 void square_solver(Coefficients coefs, Roots *roots);
 
