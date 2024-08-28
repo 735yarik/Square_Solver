@@ -12,9 +12,9 @@ enum roots_values                      /// enumeration of different roots number
 {
 
     INF_ROOTS  = -1,                   /// infinite roots
-    ZERO_ROOTS = 0,                    /// zero roots
-    ONE_ROOT   = 1,                    /// one root
-    TWO_ROOTS  = 2                     /// two roots
+    ZERO_ROOTS =  0,                    /// zero roots
+    ONE_ROOT   =  1,                    /// one root
+    TWO_ROOTS  =  2                     /// two roots
 
 };
 
@@ -39,9 +39,9 @@ struct Roots                           /// struct contains roots and number of r
 
 void solver_mode();
 
-void solver(const Coefficients coefs, Roots *roots);
+void solver(Coefficients coefs, Roots *roots);
 
-int  linear_solver(const double b, const double c, double *x1);
+int  linear_solver(double b, const double c, double *x1);
 
 void square_solver(Coefficients coefs, Roots *roots);
 

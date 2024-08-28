@@ -11,7 +11,7 @@
 * @return true if number is a zero and false if it's not
 */
 
-bool is_zero(const double num)
+bool is_zero(double num)
 {
 
     assert(isfinite(num));
@@ -31,7 +31,7 @@ bool is_zero(const double num)
 * @return true if number is a zero and false if it's not
 */
 
-bool is_equal(const double num1, const double num2)
+bool is_equal(double num1, double num2)
 {
 
     assert(isfinite(num1));

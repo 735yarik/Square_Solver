@@ -8,8 +8,6 @@
 * @brief starting solver mode
 */
 
-// check passing structs to functions and const if you don't change data
-
 void solver_mode()
 {
 
@@ -130,7 +128,7 @@ void square_solver(const Coefficients coefs, Roots *roots)
 * @note   In case of infinite number of roots returns INF_ROOTS
 */
 
-int linear_solver(const double b, const double c, double *x1)
+int linear_solver(double b, double c, double *x1)
 {
 
     assert(x1 != NULL);
@@ -160,6 +158,7 @@ int linear_solver(const double b, const double c, double *x1)
     }
     else
     {
+
         if (is_zero(c))
         {
             *x1 = 0;

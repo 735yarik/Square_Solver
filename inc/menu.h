@@ -6,9 +6,8 @@
 #include <assert.h>
 #include <TXLib.h>
 
-
 #include "./input_output.h"
-#include "./tests.h"
+#include "./test_mode.h"
 
 const int ERROR_CODE = -1;
 

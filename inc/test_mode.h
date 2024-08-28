@@ -8,7 +8,9 @@
 
 #include "./solver.h"
 
-const int MAX_TESTS = 4;
+#define RESET "\033[0m"
+#define RED   "\033[1;31m"
+#define GREEN "\033[1;32m"
 
 struct Test                            /// struct contains two other structs: Coefficients, Roots
 {

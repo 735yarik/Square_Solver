@@ -36,7 +36,8 @@ void output(Roots roots)
 {
 
     switch(roots.nRoots)
-        {
+    {
+
         case ZERO_ROOTS:
 
             printf("\nEQUATION HAS NO ROOTS\n");
@@ -44,12 +45,12 @@ void output(Roots roots)
 
         case ONE_ROOT:
 
-            printf("\nEQUATION HAS 1 ROOT:  x = %lg\n" ,roots.x1);
+            printf("\nEQUATION HAS 1 ROOT: x = %lg\n" ,roots.x1);
             break;
 
         case TWO_ROOTS:
 
-            printf("\nEQUATION HAS 2 ROOTS:x1 = %lg, x2 = %lg\n", roots.x1, roots.x2);
+            printf("\nEQUATION HAS 2 ROOTS: x1 = %lg, x2 = %lg\n", roots.x1, roots.x2);
             break;
 
         case INF_ROOTS:
@@ -59,7 +60,8 @@ void output(Roots roots)
 
         default:
             printf("\nERROR IN ROOTS NUMBER\n");
-        }
+
+    }
 
 }
 

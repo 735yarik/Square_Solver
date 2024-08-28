@@ -14,6 +14,7 @@ void menu()
 
     switch (mode)
     {
+
         case TEST_MODE:
 
             printf("\nTEST_MODE\n\n");
@@ -28,6 +29,7 @@ void menu()
 
         default:
             printf("default case\n");
+
     }
 
 }
@@ -46,7 +48,7 @@ int solver_or_test_mode()
 
     printf("Which mode do you want to use?\n"
            "Enter Ò to use test mode\n"
-           "Enter S to use solver mode\n");
+           "Enter S to use solver mode\n\n");
 
     while (true)
     {
@@ -73,6 +75,7 @@ int solver_or_test_mode()
             printf("\nEnter correct mode\n");
 
         }
+
     }
 
     return ERROR_CODE;

@@ -1,7 +1,7 @@
 #ifndef TEST_MODE_CPP
 #define TEST_MODE_CPP
 
-#include "../inc/tests.h"
+#include "../inc/test_mode.h"
 
 /**
 * @brief executing sires of tests
@@ -33,7 +33,7 @@ void execute_tests()
 
     for (size_t counter = 0; counter < tests_size; counter++)
     {
-        unit_test(tests[counter]); // pass by pointer
+        unit_test(tests[counter]);
     }
 
 }
@@ -63,7 +63,7 @@ int unit_test(Test test)
 
     {
 
-        printf("\033[1;32mtest is passed\n\n\033[0m");  // it has to be const
+        printf("%stest is passed\n\n\%s", GREEN, RESET);
 
         return 1;
 
@@ -73,10 +73,10 @@ int unit_test(Test test)
 
         printf(
 
-                "\033[1;31mtest is not passed\n"
+                "%stest is not passed\n"
                 "expected values: x1 = %lg, x2 = %lg, Roots number = %d\n"
-                "real values:     x1 = %lg, x2 = %lg, Roots number = %d\n\n\033[0m",
-                (test.roots).x1, (test.roots).x2, (test.roots).nRoots, roots.x1, roots.x2, roots.nRoots
+                "real values:     x1 = %lg, x2 = %lg, Roots number = %d\n\n%s",
+                RED, (test.roots).x1, (test.roots).x2, (test.roots).nRoots, roots.x1, roots.x2, roots.nRoots, RESET
 
              );
 
